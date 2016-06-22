@@ -4,16 +4,16 @@ var addTodo = function (text) {
         text: text
     };
 };
-var deleteTodo = function (text) {
+var deleteTodo = function (id) {
     return {
         type: 'DELETE_TODO',
-        text: text
+        id: id
     };
 };
-var completeTodo = function (text) {
+var completeTodo = function (id) {
     return {
         type: 'COMPLETE_TODO',
-
+        id: id
     };
 };
 
@@ -24,4 +24,3 @@ var actions =
         completeTodo: completeTodo
     };
 module.exports = actions;
-
