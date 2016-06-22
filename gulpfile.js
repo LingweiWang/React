@@ -2,7 +2,9 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var react = require('gulp-react');
+var nodemon = require('gulp-nodemon');
 var htmlreplace = require('gulp-html-replace');
+var sass = require('gulp-sass')
 
 var path = {
   HTML: 'src/index.html',
@@ -13,6 +15,29 @@ var path = {
   DEST_BUILD:'dist/build',
   DEST:'dist'
 };
+
+gulp.task('sass', function () {
+  return gulp.src('./sass/**/*.scss')
+    .pipe(sass.sync().on('error', sass.logError))
+    .pipe(gulp.dest('./css'));
+});
+
+gulp.task('sass:watch', function () {
+  gulp.watch('./sass/**/*.scss', ['sass']);
+});
+
+gulp.task('nodemon', function(callback){
+  var started = false;
+
+  return nodemon({
+    script: 'server/server.js'
+  }).on('start', function(){
+    if(!started) {
+        callback();
+        started = true;
+    }
+  })
+})
 
 
 gulp.task('transform', function() {
@@ -30,7 +55,7 @@ gulp.task('watch', function(){
   gulp.watch(path.ALL, ['transform', 'copy']);
 });
 
-gulp.task('default', ['watch','transform', 'copy']);
+gulp.task('default', ['watch','transform', 'copy', 'nodemon']);
 
 gulp.task('build', function() {
   gulp.src(path.JS)
